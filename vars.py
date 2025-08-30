@@ -1,9 +1,8 @@
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+# Don't Remove Credit Tg - @Tushar0125
+# Ask Doubt on telegram @Tushar0125
 
 from os import environ
 
-API_ID = int(environ.get("API_ID", "22182189"))
-API_HASH = environ.get("API_HASH", "5e7c4088f8e23d0ab61e29ae11960bf5")
-BOT_TOKEN = environ.get("BOT_TOKEN", "")
+API_ID = int(environ.get("API_ID", "16732227")) #Replace with your api id
+API_HASH = environ.get("API_HASH", "8b5594ad7ad37f3a0a7ddbfb3963bb51") #Replace with your api hash
+BOT_TOKEN = environ.get("BOT_TOKEN", "6786324246:AAE0QYG15pM0FkJ1fxvT1_Pj1JC7r7yOTq8") #Replace with your bot token
