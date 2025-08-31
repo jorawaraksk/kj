@@ -10,7 +10,6 @@ import time
 import asyncio
 import requests
 import subprocess
-import zipfile   # <-- [ADDED] For zip extraction
 
 import core as helper
 from utils import progress_bar
@@ -26,64 +25,16 @@ from pyrogram.errors.exceptions.bad_request_400 import StickerEmojiInvalid
 from pyrogram.types.messages_and_media import message
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+
 bot = Client(
     "bot",
     api_id=API_ID,
     api_hash=API_HASH,
     bot_token=BOT_TOKEN)
 
-# ---------- [ADDED] FUNCTION TO EXTRACT & SEND ZIP CONTENTS ----------
-async def extract_and_send(file_path, bot, message):
-    """Extract ZIP contents and send each file to Telegram."""
-    if zipfile.is_zipfile(file_path):
-        extract_dir = file_path + "_extracted"
-        os.makedirs(extract_dir, exist_ok=True)
-        with zipfile.ZipFile(file_path, 'r') as zip_ref:
-            zip_ref.extractall(extract_dir)
-        for root, _, files in os.walk(extract_dir):
-            for file in files:
-                await bot.send_document(
-                    chat_id=message.chat.id,
-                    document=os.path.join(root, file)
-                )
-# --------------------------------------------------------------------
 
 @bot.on_message(filters.command(["start"]))
 async def start(bot: Client, m: Message):
-    await m.reply_text(f"<b>Hello {m.from_user.mention} 👋\n\n I Am A Bot For Download Links From Your **.TXT** File And Then Upload That File On Telegram So Basically If You Want To Use Me First Send Me /upload Command And Then Follow Few Steps..\n\nUse /stop to stop any ongoing task.</b>")
-
-@bot.on_message(filters.command("stop"))
-async def restart_handler(_, m):
-    await m.reply_text("**Stopped**🚦", True)
-    os.execl(sys.executable, sys.executable, *sys.argv)
-
-@bot.on_message(filters.command(["upload"]))
-async def upload(bot: Client, m: Message):
-    # ... [NO CHANGE ABOVE THIS LINE, YOUR ORIGINAL CODE REMAINS] ...
-
-            else:
-                Show = f"**⥥ 🄳🄾🅆🄽🄻🄾🄰🄳🄸🄽🄶⬇️⬇️... »**\n\n**📝Name »** `{name}\n❄Quality » {raw_text2}`\n\n**🔗URL »** `{url}`"
-                prog = await m.reply_text(Show)
-                res_file = await helper.download_video(url, cmd, name)
-                filename = res_file
-                await prog.delete(True)
-
-                # -------- [ADDED] ZIP EXTRACTION CHECK --------
-                if filename.endswith(".zip"):
-                    await extract_and_send(filename, bot, m)
-                    os.remove(filename)
-                else:
-                    await helper.send_vid(bot, m, cc, filename, thumb, name, prog)
-                # ---------------------------------------------
-
-                count += 1
-                time.sleep(1)
-
-    except Exception as e:
-        await m.reply_text(e)
-    await m.reply_text("**𝔻ᴏɴᴇ 𝔹ᴏ𝕤𝕤😎**")
-
-bot.run()async def start(bot: Client, m: Message):
     await m.reply_text(f"<b>Hello {m.from_user.mention} 👋\n\n I Am A Bot For Download Links From Your **.TXT** File And Then Upload That File On Telegram So Basically If You Want To Use Me First Send Me /upload Command And Then Follow Few Steps..\n\nUse /stop to stop any ongoing task.</b>")
 
 
