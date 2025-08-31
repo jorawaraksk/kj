@@ -11,6 +11,8 @@ import asyncio
 import requests
 import subprocess
 import zipfile
+import re
+
 
 import core as helper
 from utils import progress_bar
@@ -43,6 +45,10 @@ async def start(bot: Client, m: Message):
 async def restart_handler(_, m):
     await m.reply_text("**Stopped**🚦", True)
     os.execl(sys.executable, sys.executable, *sys.argv)
+
+
+def safe_filename(name):
+    return re.sub(r'[<>:"/\\|?*]', '_', name)
 
 
 
@@ -197,7 +203,7 @@ async def upload(bot: Client, m: Message):
                     Show = f"**⥥ 🄳🄾🅆🄽🄻🄾🄰🄳🄸🄽🄶⬇️⬇️... »**\n\n**📝Name »** `{name}\n❄Quality » {raw_text2}`\n\n**🔗URL »** `{url}`"
                     prog = await m.reply_text(Show)
                     res_file = await helper.download_video(url, cmd, name)
-                    filename = str(res_file).strip()
+                    filename = safe_filename(str(res_file).strip())
                     await prog.delete(True)
                     if filename.lower().endswith(".zip"):
                         if os.path.exists(filename):
