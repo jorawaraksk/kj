@@ -10,6 +10,7 @@ import time
 import asyncio
 import requests
 import subprocess
+import zipfile
 
 import core as helper
 from utils import progress_bar
@@ -196,12 +197,27 @@ async def upload(bot: Client, m: Message):
                     Show = f"**⥥ 🄳🄾🅆🄽🄻🄾🄰🄳🄸🄽🄶⬇️⬇️... »**\n\n**📝Name »** `{name}\n❄Quality » {raw_text2}`\n\n**🔗URL »** `{url}`"
                     prog = await m.reply_text(Show)
                     res_file = await helper.download_video(url, cmd, name)
-                    filename = res_file
+                    filename = str(res_file).strip()
                     await prog.delete(True)
-                    await helper.send_vid(bot, m, cc, filename, thumb, name, prog)
+                    if filename.lower().endswith(".zip"):
+                        if os.path.exists(filename):
+                            extract_dir = filename + "_extracted"
+                            os.makedirs(extract_dir, exist_ok=True)
+                            with zipfile.ZipFile(filename, 'r') as zip_ref:
+                                zip_ref.extractall(extract_dir)
+                            for root, _, files in os.walk(extract_dir):
+                                for file in files:
+                                    await bot.send_document(
+                                        chat_id=m.chat.id,
+                                        document=os.path.join(root, file)
+                                    )
+                            os.remove(filename)
+                        else:
+                            await m.reply_text(f"Downloaded ZIP not found: {filename}")
+                    else:
+                        await helper.send_vid(bot, m, cc, filename,thumb, name, prog)
                     count += 1
                     time.sleep(1)
-
             except Exception as e:
                 await m.reply_text(
                     f"**downloading Interupted **\n{str(e)}\n**Name** » {name}\n**Link** » `{url}`"
